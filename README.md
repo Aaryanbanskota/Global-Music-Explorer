@@ -18,7 +18,7 @@
 ## 🚀 Demo
 
 > **Live Preview:
-> ()
+> (https://aaryanbanskota.github.io/Global-Music-Explorer/)
 
 ---
 
@@ -64,8 +64,8 @@ GlobalMusicExplorer/
 **Aaryan**  
 🧠 Role: Coding and collecting information  
 📧 Email: ugod942@gmail.com  
-📸 Instagram: [@aaryan_music](https://instagram.com/)  
-📘 Facebook: [@aaryan.music.fb](https://facebook.com/)
+📸 Instagram: [@aaryan](https://www.instagram.com/its.aaryan_01/)  
+📘 Facebook: [@aaryan](https://www.facebook.com/aaryan.baskota.2025)
 
 ---
 
