@@ -1,0 +1,507 @@
+ /* this is the css i have used in main page or index.html but i have not connected this to main page i have use inline css*/ 
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Color Variables */
+    :root {
+      --bg-dark: #0f0f1a;
+      --bg-light: #f5f5f7;
+      --glass-dark: rgba(15, 15, 26, 0.8);
+      --glass-light: rgba(255, 255, 255, 0.8);
+      --text-dark: #ffffff;
+      --text-light: #333333;
+      --accent: #6c5ce7;
+      --accent-light: #8577e6;
+      --danger: #ff4757;
+      --success: #2ed573;
+    }
+
+    /* Theme Switching */
+    [data-theme="dark"] {
+      --bg: var(--bg-dark);
+      --text: var(--text-dark);
+      --glass: var(--glass-dark);
+    }
+
+    [data-theme="light"] {
+      --bg: var(--bg-light);
+      --text: var(--text-light);
+      --glass: var(--glass-light);
+    }
+
+    /* Base Styles */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* Glass Effect */
+    .glass {
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    button {
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    /* Splash Screen */
+    #splash {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .splash-content {
+      text-align: center;
+      padding: 2rem;
+      max-width: 500px;
+    }
+
+    .splash-content img {
+      width: 150px;
+      margin-bottom: 1rem;
+    }
+
+    .splash-content button {
+      padding: 0.75rem 2rem;
+      margin-top: 1.5rem;
+      border: none;
+      border-radius: 8px;
+      background: var(--accent);
+      color: white;
+      font-weight: 500;
+      font-size: 1rem;
+    }
+
+    /* Human Check */
+    #human-check {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 2rem;
+      z-index: 101;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .quiz-option {
+      padding: 0.75rem;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .quiz-option:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Main App */
+    .hidden {
+      display: none !important;
+    }
+
+    #app {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 280px;
+      padding: 1.5rem;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .logo-container img {
+      height: 40px;
+    }
+
+    .logo-text {
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+
+    .search-box {
+      position: relative;
+      margin: 1rem 0;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 0.75rem 1rem 0.75rem 2.5rem;
+      border-radius: 8px;
+      border: none;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text);
+      font-size: 0.9rem;
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.7;
+    }
+
+    .sidebar-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .sidebar-btn {
+      padding: 0.75rem;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text);
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .sidebar-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .sidebar-btn i {
+      width: 20px;
+      text-align: center;
+    }
+
+    .countries-list {
+      margin-top: 1rem;
+      max-height: 50vh;
+      overflow-y: auto;
+      padding-right: 0.5rem;
+    }
+
+    .country-btn {
+      width: 100%;
+      padding: 0.75rem;
+      margin: 0.25rem 0;
+      border: none;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      border-radius: 8px;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .country-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .country-btn .flag {
+      width: 20px;
+      height: 15px;
+      object-fit: cover;
+      border-radius: 2px;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    #welcome-message {
+      text-align: center;
+      max-width: 600px;
+      margin: 2rem auto;
+    }
+
+    #welcome-message h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    #welcome-message p {
+      opacity: 0.8;
+      margin-bottom: 2rem;
+    }
+
+    .country-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .country-flag {
+      width: 40px;
+      height: 30px;
+      object-fit: cover;
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .song-section {
+      margin-top: 2.5rem;
+    }
+
+    .song-section h3 {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      font-size: 1.25rem;
+    }
+
+    .song-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .song-card {
+      padding: 1rem;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .song-card:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .song-card .play-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--accent);
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .song-card:hover .play-btn {
+      opacity: 1;
+    }
+
+    .song-card h4 {
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .song-card p {
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0.8;
+    }
+
+    /* Playlist Modal */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .modal.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal-content {
+      background: var(--bg);
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--text);
+      opacity: 0.7;
+    }
+
+    .playlist-form {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .playlist-form input {
+      flex: 1;
+      padding: 0.75rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text);
+    }
+
+    .playlist-form button {
+      padding: 0 1rem;
+      border-radius: 8px;
+      border: none;
+      background: var(--accent);
+      color: white;
+    }
+
+    .playlist-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem;
+      margin: 0.5rem 0;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+    }
+
+    .playlist-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .playlist-btn {
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      border: none;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text);
+    }
+
+    .delete-btn {
+      background: var(--danger);
+      color: white;
+    }
+
+    .view-btn {
+      background: var(--accent);
+      color: white;
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      border-top-color: var(--accent);
+      animation: spin 1s ease-in-out infinite;
+      margin: 2rem auto;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .song-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      }
+    }
+
+    @media (max-width: 768px) {
+      #app {
+        flex-direction: column;
+      }
+      
+      .sidebar {
+        width: 100%;
+        height: auto;
+        padding: 1rem;
+      }
+      
+      .main-content {
+        padding: 1.5rem;
+      }
+      
+      .song-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      }
+    }
+
+    @media (max-width: 480px) {
+      .song-grid {
+        grid-template-columns: 1fr;
+      }
+    }

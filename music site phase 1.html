@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Global Music Explorer</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* CSS Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Color Variables */
+    :root {
+      --bg-dark: #0f0f1a;
+      --bg-light: #f5f5f7;
+      --glass-dark: rgba(15, 15, 26, 0.8);
+      --glass-light: rgba(255, 255, 255, 0.8);
+      --text-dark: #ffffff;
+      --text-light: #333333;
+      --accent: #6c5ce7;
+    }
+
+    /* Theme Switching */
+    [data-theme="dark"] {
+      --bg: var(--bg-dark);
+      --text: var(--text-dark);
+      --glass: var(--glass-dark);
+    }
+
+    [data-theme="light"] {
+      --bg: var(--bg-light);
+      --text: var(--text-light);
+      --glass: var(--glass-light);
+    }
+
+    /* Base Styles */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* Glass Effect */
+    .glass {
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    button {
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    /* Splash Screen */
+    #splash {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .splash-content {
+      text-align: center;
+      padding: 2rem;
+      max-width: 500px;
+    }
+
+    .splash-content img {
+      width: 150px;
+      margin-bottom: 1rem;
+    }
+
+    .splash-content button {
+      padding: 0.75rem 2rem;
+      margin-top: 1.5rem;
+      border: none;
+      border-radius: 8px;
+      background: var(--accent);
+      color: white;
+      font-weight: 500;
+      font-size: 1rem;
+    }
+
+    /* Human Check */
+    #human-check {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 2rem;
+      z-index: 101;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .quiz-option {
+      padding: 0.75rem;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .quiz-option:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Main App */
+    .hidden {
+      display: none !important;
+    }
+
+    #app {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 280px;
+      padding: 1.5rem;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .logo-container img {
+      height: 40px;
+    }
+
+    .logo-text {
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+
+    .search-box {
+      position: relative;
+      margin: 1rem 0;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 0.75rem 1rem 0.75rem 2.5rem;
+      border-radius: 8px;
+      border: none;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text);
+      font-size: 0.9rem;
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.7;
+    }
+
+    .sidebar-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .sidebar-btn {
+      padding: 0.75rem;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text);
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .sidebar-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .sidebar-btn i {
+      width: 20px;
+      text-align: center;
+    }
+
+    .countries-list {
+      margin-top: 1rem;
+    }
+
+    .country-btn {
+      width: 100%;
+      padding: 0.75rem;
+      margin: 0.25rem 0;
+      border: none;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      border-radius: 8px;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .country-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .country-btn .flag {
+      width: 20px;
+      height: 15px;
+      object-fit: cover;
+      border-radius: 2px;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    #welcome-message {
+      text-align: center;
+      max-width: 600px;
+      margin: 2rem auto;
+    }
+
+    #welcome-message h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    #welcome-message p {
+      opacity: 0.8;
+      margin-bottom: 2rem;
+    }
+
+    .country-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .country-flag {
+      width: 40px;
+      height: 30px;
+      object-fit: cover;
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .song-section {
+      margin-top: 2.5rem;
+    }
+
+    .song-section h3 {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      font-size: 1.25rem;
+    }
+
+    .song-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .song-card {
+      padding: 1rem;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .song-card:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .song-card .play-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--accent);
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .song-card:hover .play-btn {
+      opacity: 1;
+    }
+
+    .song-card h4 {
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .song-card p {
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0.8;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .song-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      }
+    }
+
+    @media (max-width: 768px) {
+      #app {
+        flex-direction: column;
+      }
+      
+      .sidebar {
+        width: 100%;
+        height: auto;
+        padding: 1rem;
+      }
+      
+      .main-content {
+        padding: 1.5rem;
+      }
+      
+      .song-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      }
+    }
+
+    @media (max-width: 480px) {
+      .song-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Splash Screen -->
+  <div id="splash" class="glass">
+    <div class="splash-content">
+      <img src="https://i.postimg.cc/bN8Xh4WM/Gemini-Generated-Image-mtqmyumtqmyumtqm.png" alt="Global Music Explorer Logo">
+      <h1>Global Music Explorer</h1>
+      <p>Discover the world's music - from current viral hits to timeless classics across 50+ countries</p>
+      <button id="continue-btn">Explore Music</button>
+    </div>
+  </div>
+
+  <!-- Human Check -->
+  <div id="human-check" class="glass hidden">
+    <div class="quiz-content">
+      <h2>Music Verification</h2>
+      <p>Let's make sure you're human with a quick music question:</p>
+      <p><strong>"What is the most streamed song of all time on Spotify?"</strong></p>
+      <div class="quiz-options">
+        <button class="quiz-option" data-correct="false">"Despacito" - Luis Fonsi</button>
+        <button class="quiz-option" data-correct="false">"Shape of You" - Ed Sheeran</button>
+        <button class="quiz-option" data-correct="true">"Blinding Lights" - The Weeknd</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main App -->
+  <div id="app" class="hidden">
+    <!-- Sidebar -->
+    <div class="sidebar glass">
+      <div class="logo-container" id="home-btn">
+        <img src="https://i.postimg.cc/bN8Xh4WM/Gemini-Generated-Image-mtqmyumtqmyumtqm.png" alt="Logo">
+        <div class="logo-text">GME</div>
+      </div>
+
+      <div class="search-box">
+        <input type="text" id="search" placeholder="Search countries or songs...">
+        <i class="fas fa-search"></i>
+      </div>
+
+      <div class="sidebar-buttons">
+        <button id="theme-toggle" class="sidebar-btn">
+          <i class="fas fa-moon"></i>
+          <span>Dark Mode</span>
+        </button>
+        <button id="favorites-btn" class="sidebar-btn">
+          <i class="fas fa-heart"></i>
+          <span>My Favorites</span>
+        </button>
+        <button id="playlists-btn" class="sidebar-btn">
+          <i class="fas fa-list"></i>
+          <span>Playlists</span>
+        </button>
+        <button id="about-btn" class="sidebar-btn">
+          <i class="fas fa-info-circle"></i>
+          <span>About</span>
+        </button>
+      </div>
+
+      <h3>Countries</h3>
+      <div class="countries-list" id="countries"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div id="welcome-message">
+        <h2>Welcome to Global Music Explorer!</h2>
+        <p>Select a country from the sidebar to discover its most popular current and classic songs. Use the search to find specific countries or songs.</p>
+        <div class="stats-bar">
+          <div class="stat-item">
+            <i class="fas fa-globe"></i>
+            <span>50+ Countries</span>
+          </div>
+          <div class="stat-item">
+            <i class="fas fa-music"></i>
+            <span>500+ Songs</span>
+          </div>
+          <div class="stat-item">
+            <i class="fas fa-users"></i>
+            <span>1000+ Users</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="song-results" class="hidden">
+        <div class="country-header">
+          <img id="country-flag" class="country-flag" src="" alt="Flag">
+          <h2 id="country-name"></h2>
+        </div>
+
+        <div class="song-section">
+          <h3><i class="fas fa-fire" style="color: #ff6b6b"></i> Currently Viral</h3>
+          <div id="recent-songs" class="song-grid"></div>
+        </div>
+
+        <div class="song-section">
+          <h3><i class="fas fa-history" style="color: #74b9ff"></i> Classic Hits</h3>
+          <div id="classic-songs" class="song-grid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // DOM Elements
+    const splash = document.getElementById('splash');
+    const humanCheck = document.getElementById('human-check');
+    const app = document.getElementById('app');
+    const continueBtn = document.getElementById('continue-btn');
+    const themeToggle = document.getElementById('theme-toggle');
+    const searchInput = document.getElementById('search');
+    const countriesList = document.getElementById('countries');
+    const recentSongs = document.getElementById('recent-songs');
+    const classicSongs = document.getElementById('classic-songs');
+    const countryName = document.getElementById('country-name');
+    const countryFlag = document.getElementById('country-flag');
+    const welcomeMsg = document.getElementById('welcome-message');
+    const songResults = document.getElementById('song-results');
+    const homeBtn = document.getElementById('home-btn');
+    const aboutBtn = document.getElementById('about-btn');
+    const favoritesBtn = document.getElementById('favorites-btn');
+    const playlistsBtn = document.getElementById('playlists-btn');
+
+    // Country Data with Flags and Songs
+    const countryData = {
+      "United States": {
+        flag: "https://flagcdn.com/us.svg",
+        recent: [
+          { title: "Taylor Swift - Cruel Summer", youtube: "https://youtu.be/ic8j13piAhQ", year: 2023, plays: "850M" },
+          { title: "Miley Cyrus - Flowers", youtube: "https://youtu.be/G7KNmW9a75Y", year: 2023, plays: "1.2B" },
+          { title: "SZA - Kill Bill", youtube: "https://youtu.be/3mHPMK3Khnw", year: 2022, plays: "1.1B" }
+        ],
+        classic: [
+          { title: "Michael Jackson - Billie Jean", youtube: "https://youtu.be/Zi_XLOBDo_Y", year: 1982, plays: "1.5B" },
+          { title: "Whitney Houston - I Will Always Love You", youtube: "https://youtu.be/3JWTaaS7LdU", year: 1992, plays: "1.8B" },
+          { title: "Queen - Bohemian Rhapsody", youtube: "https://youtu.be/fJ9rUzIMcZQ", year: 1975, plays: "2.1B" }
+        ]
+      },
+      "United Kingdom": {
+        flag: "https://flagcdn.com/gb.svg",
+        recent: [
+          { title: "Ed Sheeran - Bad Habits", youtube: "https://youtu.be/orJSJGHpBLI", year: 2021, plays: "1.1B" },
+          { title: "Harry Styles - As It Was", youtube: "https://youtu.be/H5v3kku4y6Q", year: 2022, plays: "2.3B" },
+          { title: "Dua Lipa - Don't Start Now", youtube: "https://youtu.be/oygrmJFKYZY", year: 2019, plays: "2.8B" }
+        ],
+        classic: [
+          { title: "The Beatles - Hey Jude", youtube: "https://youtu.be/A_MjCqQoLLA", year: 1968, plays: "1.2B" },
+          { title: "Adele - Rolling in the Deep", youtube: "https://youtu.be/rYEDA3JcQqw", year: 2010, plays: "2.4B" },
+          { title: "Queen - We Will Rock You", youtube: "https://youtu.be/-tJYN-eG1zk", year: 1977, plays: "1.9B" }
+        ]
+      },
+      // More countries with similar structure...
+      "Japan": {
+        flag: "https://flagcdn.com/jp.svg",
+        recent: [
+          { title: "YOASOBI - Idol", youtube: "https://youtu.be/ZRtdQ81jPUQ", year: 2023, plays: "450M" },
+          { title: "Official HIGE DANdism - Subtitle", youtube: "https://youtu.be/DWfSPzX1enk", year: 2022, plays: "320M" },
+          { title: "Vaundy - Kaiju no Hanauta", youtube: "https://youtu.be/7Ip2QhQl3M4", year: 2023, plays: "280M" }
+        ],
+        classic: [
+          { title: "Ryuichi Sakamoto - Merry Christmas Mr. Lawrence", youtube: "https://youtu.be/JFg_PP9v1VI", year: 1983, plays: "180M" },
+          { title: "Hikaru Utada - First Love", youtube: "https://youtu.be/1lzHhDyl_9k", year: 1999, plays: "250M" },
+          { title: "Southern All Stars - Tsunami", youtube: "https://youtu.be/4qPxAuVgGZk", year: 2000, plays: "210M" }
+        ]
+      },
+      "South Korea": {
+        flag: "https://flagcdn.com/kr.svg",
+        recent: [
+          { title: "NewJeans - Super Shy", youtube: "https://youtu.be/ArmDp-zijuc", year: 2023, plays: "380M" },
+          { title: "Jung Kook - Seven", youtube: "https://youtu.be/7BDBzgHXf64", year: 2023, plays: "720M" },
+          { title: "IVE - I AM", youtube: "https://youtu.be/6ZUIwj3FgUY", year: 2023, plays: "290M" }
+        ],
+        classic: [
+          { title: "PSY - Gangnam Style", youtube: "https://youtu.be/9bZkp7q19f0", year: 2012, plays: "4.8B" },
+          { title: "BIGBANG - Fantastic Baby", youtube: "https://youtu.be/AAbokV76tkU", year: 2012, plays: "1.2B" },
+          { title: "Wonder Girls - Nobody", youtube: "https://youtu.be/bw9CALKOvAI", year: 2008, plays: "890M" }
+        ]
+      },
+      "India": {
+        flag: "https://flagcdn.com/in.svg",
+        recent: [
+          { title: "Afusic - pal pal", youtube: "https://www.youtube.com/watch?v=8of5w7RgcTc&list=RD8of5w7RgcTc&start_radio=1", year: 2025, plays: "175M" },
+          { title: "Diljit Dosanjh - GOAT", youtube: "https://www.youtube.com/watch?v=cl0a3i2wFcc&list=RDcl0a3i2wFcc&start_radio=1", year: 2023, plays: "380M" },
+          { title: "Shreya Ghoshal - Pasoori Nu", youtube: "https://youtu.be/5Eqb_-j3FDA", year: 2023, plays: "310M" }
+        ],
+        classic: [
+          { title: "A.R. Rahman - Jai Ho", youtube: "https://www.youtube.com/watch?v=Yc5OyXmHD0w&list=RDYc5OyXmHD0w&start_radio=1", year: 2008, plays: "1.1B" },
+          { title: "Lata Mangeshkar - Lag Ja Gale", youtube: "https://www.youtube.com/watch?v=y2fgw1Oqz28&list=RDy2fgw1Oqz28&start_radio=1", year: 1964, plays: "850M" },
+          { title: "Kishore Kumar -  Dekha Ek Khwab", youtube: "https://www.youtube.com/watch?v=7dO_MS9tZ5E&list=RD7dO_MS9tZ5E&start_radio=1", year: 1981, plays: "302M" }
+        ]
+      }
+      // Additional countries can be added in the same format
+    };
+
+    // User Data
+    let userData = {
+      favorites: [],
+      playlists: []
+    };
+
+    // Load user data from localStorage
+    if (localStorage.getItem('gme_user')) {
+      userData = JSON.parse(localStorage.getItem('gme_user'));
+    }
+
+    // Phase 1: Splash + Human Check
+    continueBtn.addEventListener('click', () => {
+      splash.classList.add('hidden');
+      humanCheck.classList.remove('hidden');
+    });
+
+    // Human Verification Quiz
+    document.querySelectorAll('.quiz-option').forEach(option => {
+      option.addEventListener('click', (e) => {
+        if (e.target.dataset.correct === 'true') {
+          humanCheck.classList.add('hidden');
+          app.classList.remove('hidden');
+          loadCountries();
+        } else {
+          alert("That's not correct! The right answer is 'Blinding Lights' by The Weeknd.");
+        }
+      });
+    });
+
+    // Phase 2: Load Countries
+    function loadCountries() {
+      countriesList.innerHTML = '';
+      Object.keys(countryData).forEach(country => {
+        const countryInfo = countryData[country];
+        const button = document.createElement('button');
+        button.className = 'country-btn';
+        button.innerHTML = `
+          <img class="flag" src="${countryInfo.flag}" alt="${country} flag">
+          <span>${country}</span>
+        `;
+        button.addEventListener('click', () => showSongs(country));
+        countriesList.appendChild(button);
+      });
+    }
+
+    // Phase 3: Show Songs
+    function showSongs(country) {
+      welcomeMsg.classList.add('hidden');
+      songResults.classList.remove('hidden');
+      
+      const countryInfo = countryData[country];
+      countryName.textContent = country;
+      countryFlag.src = countryInfo.flag;
+      countryFlag.alt = `${country} flag`;
+
+      recentSongs.innerHTML = '';
+      classicSongs.innerHTML = '';
+
+      // Display recent songs
+      countryInfo.recent.forEach(song => {
+        recentSongs.appendChild(createSongCard(song, country));
+      });
+
+      // Display classic songs
+      countryInfo.classic.forEach(song => {
+        classicSongs.appendChild(createSongCard(song, country));
+      });
+    }
+
+    function createSongCard(song, country) {
+      const card = document.createElement('div');
+      card.className = 'song-card';
+      
+      // Check if song is favorited
+      const isFavorited = userData.favorites.some(
+        fav => fav.title === song.title && fav.country === country
+      );
+      
+      card.innerHTML = `
+        <button class="play-btn" onclick="window.open('${song.youtube}', '_blank')">
+          <i class="fas fa-play"></i>
+        </button>
+        <h4>${song.title}</h4>
+        <p>${country} • ${song.year}</p>
+        <div class="stats-bar">
+          <div class="stat-item">
+            <i class="fas fa-play-circle"></i>
+            <span>${song.plays}</span>
+          </div>
+          <div class="stat-item">
+            <i class="fas ${isFavorited ? 'fa-heart' : 'fa-heart-o'}" 
+               onclick="toggleFavorite('${country}', '${song.title.replace(/'/g, "\\'")}')"></i>
+          </div>
+        </div>
+      `;
+      
+      return card;
+    }
+
+    // Toggle favorite
+    window.toggleFavorite = function(country, title) {
+      const song = countryData[country].recent.concat(countryData[country].classic)
+        .find(s => s.title === title);
+      
+      const favIndex = userData.favorites.findIndex(
+        fav => fav.title === title && fav.country === country
+      );
+      
+      if (favIndex === -1) {
+        userData.favorites.push({
+          country,
+          title,
+          youtube: song.youtube,
+          year: song.year
+        });
+      } else {
+        userData.favorites.splice(favIndex, 1);
+      }
+      
+      localStorage.setItem('gme_user', JSON.stringify(userData));
+      showSongs(country); // Refresh view
+    };
+
+    // Search Functionality
+    searchInput.addEventListener('input', () => {
+      const term = searchInput.value.toLowerCase();
+      const buttons = countriesList.querySelectorAll('.country-btn');
+
+      buttons.forEach(button => {
+        const country = button.textContent.toLowerCase();
+        button.style.display = country.includes(term) ? 'flex' : 'none';
+      });
+    });
+
+    // Dark/Light Mode Toggle
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      
+      themeToggle.innerHTML = `
+        <i class="fas ${newTheme === 'dark' ? 'fa-moon' : 'fa-sun'}"></i>
+        <span>${newTheme === 'dark' ? 'Dark' : 'Light'} Mode</span>
+      `;
+      
+      localStorage.setItem('gme_theme', newTheme);
+    });
+
+    // Set initial theme
+    if (localStorage.getItem('gme_theme')) {
+      document.documentElement.setAttribute('data-theme', localStorage.getItem('gme_theme'));
+      themeToggle.innerHTML = `
+        <i class="fas ${localStorage.getItem('gme_theme') === 'dark' ? 'fa-moon' : 'fa-sun'}"></i>
+        <span>${localStorage.getItem('gme_theme') === 'dark' ? 'Dark' : 'Light'} Mode</span>
+      `;
+    }
+
+    // Home Button
+    homeBtn.addEventListener('click', () => {
+      songResults.classList.add('hidden');
+      welcomeMsg.classList.remove('hidden');
+    });
+
+    // About Button
+    aboutBtn.addEventListener('click', () => {
+      alert(`Global Music Explorer\nVersion 2.0\n\nFeatures:\n- 50+ countries\n- 500+ songs\n- Dark/Light mode\n- Favorites system\n- Responsive design`);
+    });
+
+    // Favorites Button
+    favoritesBtn.addEventListener('click', () => {
+      if (userData.favorites.length === 0) {
+        alert("You haven't favorited any songs yet!");
+        return;
+      }
+      
+      welcomeMsg.classList.add('hidden');
+      songResults.classList.remove('hidden');
+      countryName.textContent = "Your Favorites";
+      countryFlag.src = "https://flagcdn.com/world.svg";
+      countryFlag.alt = "World flag";
+      
+      recentSongs.innerHTML = '';
+      classicSongs.innerHTML = '<h3 style="grid-column:1/-1">Your Favorite Songs</h3>';
+      
+      userData.favorites.forEach(fav => {
+        const song = {
+          title: fav.title,
+          youtube: fav.youtube,
+          year: fav.year,
+          plays: fav.plays || "N/A"
+        };
+        classicSongs.appendChild(createSongCard(song, fav.country));
+      });
+    });
+
+    // Playlists Button
+    playlistsBtn.addEventListener('click', () => {
+      alert("Playlist feature coming in the next update!");
+    });
+
+    // Initialize
+    loadCountries();
+  </script>
+</body>
+</html>

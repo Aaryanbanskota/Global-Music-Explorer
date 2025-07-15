@@ -1,0 +1,20 @@
+{
+  "Japan": {
+    "recent": [
+      { "title": "YOASOBI - Idol", "youtube": "https://youtu.be/ZRtdQ81jPUQ" }
+    ],
+    "classic": [
+      { "title": "Ryuichi Sakamoto - Merry Christmas Mr. Lawrence", "youtube": "https://youtu.be/JFg_PP9v1VI" }
+    ]
+  },
+  "Brazil": {
+    "recent": [
+      { "title": "MC Ryan SP - Morango do Nordeste", "youtube": "https://youtu.be/6q0QH4cap8c" }
+    ],
+    "classic": [
+      { "title": "Antonio Carlos Jobim - The Girl from Ipanema", "youtube": "https://youtu.be/UJkxFhFRFDA" }
+    ]
+  }
+}
+//i have used this type of json file to store songs data//
+//it is not connected to main page i have use inline script tag//
